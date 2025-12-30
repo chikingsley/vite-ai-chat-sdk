@@ -1,10 +1,14 @@
-"use client";
-
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
 import { motion } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
-import type { User } from "next-auth";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+// User type for sidebar (simplified without next-auth)
+interface User {
+  id: string;
+  email?: string | null;
+  type?: "guest" | "regular";
+}
 import { toast } from "sonner";
 import useSWRInfinite from "swr/infinite";
 import {
@@ -99,7 +103,8 @@ export function getChatHistoryPaginationKey(
 
 export function SidebarHistory({ user }: { user: User | undefined }) {
   const { setOpenMobile } = useSidebar();
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
   const id = pathname?.startsWith("/chat/") ? pathname.split("/")[2] : null;
 
   const {
@@ -112,7 +117,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     fallbackData: [],
   });
 
-  const router = useRouter();
+  const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -149,8 +154,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
         });
 
         if (isCurrentChat) {
-          router.replace("/");
-          router.refresh();
+          navigate("/", { replace: true });
         }
 
         return "Chat deleted successfully";
