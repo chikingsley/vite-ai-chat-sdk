@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { ComponentProps, ReactNode } from "react";
 import {
   Command,
@@ -168,12 +167,11 @@ export const ModelSelectorLogo = ({
   provider,
   className,
 }: ModelSelectorLogoProps) => (
-  <Image
+  <img
     alt={`${provider} logo`}
     className={cn("size-3 dark:invert", className)}
     height={12}
     src={`https://models.dev/logos/${provider}.svg`}
-    unoptimized
     width={12}
   />
 );

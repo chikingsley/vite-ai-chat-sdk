@@ -228,4 +228,36 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
 
     const deletedChat = await deleteChatById({ id });
     return deletedChat;
+  })
+  // Update chat visibility
+  .patch(
+    "/chat/:id/visibility",
+    async ({ params, body }) => {
+      const { visibility } = body;
+      await import("@/lib/db/queries").then(({ updateChatVisibilityById }) =>
+        updateChatVisibilityById({ chatId: params.id, visibility })
+      );
+      return { success: true };
+    },
+    {
+      body: t.Object({
+        visibility: t.Union([t.Literal("public"), t.Literal("private")]),
+      }),
+    }
+  )
+  // Delete trailing messages
+  .delete("/messages/:id/trailing", async ({ params }) => {
+    const { getMessageById, deleteMessagesByChatIdAfterTimestamp } = await import("@/lib/db/queries");
+    const [message] = await getMessageById({ id: params.id });
+
+    if (!message) {
+      throw new Error("Message not found");
+    }
+
+    await deleteMessagesByChatIdAfterTimestamp({
+      chatId: message.chatId,
+      timestamp: message.createdAt,
+    });
+
+    return { success: true };
   });
