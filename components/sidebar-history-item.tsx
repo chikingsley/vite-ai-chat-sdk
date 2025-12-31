@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import { useChatVisibility } from "@/hooks/use-chat-visibility";
 import type { Chat } from "@/lib/db/schema";
 import {
@@ -45,7 +45,7 @@ const PureChatItem = ({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link to={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
+        <Link onClick={() => setOpenMobile(false)} to={`/chat/${chat.id}`}>
           <span>{chat.title}</span>
         </Link>
       </SidebarMenuButton>

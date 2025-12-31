@@ -11,7 +11,9 @@ export const historyRoutes = new Elysia({ prefix: "/api" })
     const endingBefore = query.ending_before || null;
 
     if (startingAfter && endingBefore) {
-      throw new Error("Only one of starting_after or ending_before can be provided.");
+      throw new Error(
+        "Only one of starting_after or ending_before can be provided."
+      );
     }
 
     const chats = await getChatsByUserId({

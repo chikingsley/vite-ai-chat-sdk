@@ -1,14 +1,14 @@
-import { Routes, Route } from "react-router-dom";
-import { ChatLayout } from "./layouts/ChatLayout";
-import { NewChatPage } from "./pages/NewChatPage";
-import { ChatPage } from "./pages/ChatPage";
+import { Route, Routes } from "react-router-dom";
+import { ChatLayout } from "./layouts/chat-layout";
+import { ChatPage } from "./pages/chat-page";
+import { NewChatPage } from "./pages/new-chat-page";
 
 export default function App() {
   return (
     <Routes>
       <Route element={<ChatLayout />}>
-        <Route path="/" element={<NewChatPage />} />
-        <Route path="/chat/:id" element={<ChatPage />} />
+        <Route element={<NewChatPage />} path="/" />
+        <Route element={<ChatPage />} path="/chat/:id" />
       </Route>
     </Routes>
   );

@@ -49,8 +49,12 @@
   --radius: 0.5rem;
   --sidebar: hsl(0 0% 98%);
   /* Font variables - set via CSS since we're not using next/font */
-  --font-geist: "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-geist-mono: "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-geist:
+    "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-geist-mono:
+    "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
 }
 
 /* define design tokens (dark mode) */
