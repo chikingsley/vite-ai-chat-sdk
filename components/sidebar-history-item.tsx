@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import { useChatVisibility } from "@/hooks/use-chat-visibility";
 import type { Chat } from "@/lib/db/schema";
 import {

@@ -7,6 +7,14 @@ import type { requestSuggestions } from "./ai/tools/request-suggestions";
 import type { updateDocument } from "./ai/tools/update-document";
 import type { Suggestion } from "./db/schema";
 
+// Simple session type (replaces next-auth Session)
+export interface Session {
+  user?: {
+    id: string;
+    email?: string | null;
+  } | null;
+}
+
 export type DataPart = { type: "append-message"; message: string };
 
 export const messageMetadataSchema = z.object({
@@ -31,7 +39,6 @@ export type ChatTools = {
 
 export type CustomUIDataTypes = {
   textDelta: string;
-  imageDelta: string;
   sheetDelta: string;
   codeDelta: string;
   suggestion: Suggestion;

@@ -1,4 +1,5 @@
-import type { UserType } from "@/app/(auth)/auth";
+// User types (simplified, previously from auth)
+export type UserType = "guest" | "regular";
 
 type Entitlements = {
   maxMessagesPerDay: number;

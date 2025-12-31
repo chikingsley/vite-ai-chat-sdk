@@ -1,13 +1,37 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { Elysia } from "elysia";
-import { mkdir, writeFile } from "fs/promises";
-import { join } from "path";
 
 // Simple file storage - saves to local uploads directory
 // In production, you'd want to use a cloud storage service
 const UPLOADS_DIR = "./uploads";
 
-export const filesRoutes = new Elysia({ prefix: "/api" })
-  .post("/files/upload", async ({ request }) => {
+const MIME_TYPES: Record<string, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  gif: "image/gif",
+  webp: "image/webp",
+};
+
+export const filesRoutes = new Elysia()
+  // Serve uploaded files at /uploads/:filename
+  .get("/uploads/:filename", async ({ params, set }) => {
+    try {
+      const filepath = join(UPLOADS_DIR, params.filename);
+      const file = await readFile(filepath);
+      const ext = params.filename.split(".").pop()?.toLowerCase() || "";
+      set.headers["content-type"] =
+        MIME_TYPES[ext] || "application/octet-stream";
+      set.headers["cache-control"] = "public, max-age=31536000";
+      return file;
+    } catch {
+      set.status = 404;
+      return { error: "File not found" };
+    }
+  })
+  // Upload endpoint at /api/files/upload
+  .post("/api/files/upload", async ({ request }) => {
     try {
       const formData = await request.formData();
       const file = formData.get("file") as File;

@@ -1,12 +1,10 @@
-import { gateway } from "@ai-sdk/gateway";
-import {
-  customProvider,
-  extractReasoningMiddleware,
-  wrapLanguageModel,
-} from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
 
-const THINKING_SUFFIX_REGEX = /-thinking$/;
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 export const myProvider = isTestEnvironment
   ? (() => {
@@ -27,36 +25,33 @@ export const myProvider = isTestEnvironment
     })()
   : null;
 
+/**
+ * Get a language model by ID.
+ *
+ * Gemini 2.5 and 3 models have native thinking/reasoning support:
+ * - Gemini 2.5: Use `thinkingBudget` in providerOptions (0=off, -1=dynamic, or token count)
+ * - Gemini 3: Use `thinkingLevel` in providerOptions ("minimal", "low", "medium", "high")
+ *
+ * Configure thinking per-request via providerOptions.google.thinkingConfig
+ */
 export function getLanguageModel(modelId: string) {
   if (isTestEnvironment && myProvider) {
-    return myProvider.languageModel(modelId);
+    return myProvider.languageModel("chat-model");
   }
 
-  const isReasoningModel =
-    modelId.includes("reasoning") || modelId.endsWith("-thinking");
-
-  if (isReasoningModel) {
-    const gatewayModelId = modelId.replace(THINKING_SUFFIX_REGEX, "");
-
-    return wrapLanguageModel({
-      model: gateway.languageModel(gatewayModelId),
-      middleware: extractReasoningMiddleware({ tagName: "thinking" }),
-    });
-  }
-
-  return gateway.languageModel(modelId);
+  return google(modelId);
 }
 
 export function getTitleModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("title-model");
   }
-  return gateway.languageModel("anthropic/claude-haiku-4.5");
+  return google("gemini-2.5-flash-lite");
 }
 
 export function getArtifactModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("artifact-model");
   }
-  return gateway.languageModel("anthropic/claude-haiku-4.5");
+  return google("gemini-2.5-flash-lite");
 }

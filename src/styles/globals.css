@@ -2,7 +2,7 @@
 @import "katex/dist/katex.min.css";
 
 /* include utility classes in streamdown */
-@source '../../node_modules/streamdown/dist/index.js';
+@source "../../node_modules/streamdown/dist/index.js";
 
 /* custom variant for setting dark mode programmatically */
 @custom-variant dark (&:is(.dark, .dark *));
@@ -49,8 +49,12 @@
   --radius: 0.5rem;
   --sidebar: hsl(0 0% 98%);
   /* Font variables - set via CSS since we're not using next/font */
-  --font-geist: "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-geist-mono: "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-geist:
+    "Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-geist-mono:
+    "Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
 }
 
 /* define design tokens (dark mode) */
@@ -213,7 +217,7 @@
 
 .skeleton {
   * {
-    pointer-events: none !important;
+    pointer-events: none;
   }
 
   *[class^="text-"] {

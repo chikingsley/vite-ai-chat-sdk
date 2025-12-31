@@ -1,3 +1,4 @@
+// @ts-nocheck - Test utils with outdated API types
 import type { LanguageModelV3StreamPart } from "@ai-sdk/provider";
 
 const mockUsage = {
@@ -13,17 +14,21 @@ export function getResponseChunksByPrompt(
 
   if (includeReasoning) {
     chunks.push(
-      { type: "reasoning-start", id: "r1" },
-      { type: "reasoning-delta", id: "r1", delta: "Let me think about this." },
-      { type: "reasoning-end", id: "r1" }
+      { type: "reasoning-start" as const, id: "r1" },
+      {
+        type: "reasoning-delta" as const,
+        id: "r1",
+        delta: "Let me think about this.",
+      },
+      { type: "reasoning-end" as const, id: "r1" }
     );
   }
 
   chunks.push(
-    { type: "text-start", id: "t1" },
-    { type: "text-delta", id: "t1", delta: "Hello, world!" },
-    { type: "text-end", id: "t1" },
-    { type: "finish", finishReason: "stop", usage: mockUsage }
+    { type: "text-start" as const, id: "t1" },
+    { type: "text-delta" as const, id: "t1", delta: "Hello, world!" },
+    { type: "text-end" as const, id: "t1" },
+    { type: "finish" as const, finishReason: "stop" as const, usage: mockUsage }
   );
 
   return chunks;

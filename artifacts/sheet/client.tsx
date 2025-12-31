@@ -10,9 +10,9 @@ import {
 } from "@/components/icons";
 import { SpreadsheetEditor } from "@/components/sheet-editor";
 
-type Metadata = any;
+type SheetMetadata = null;
 
-export const sheetArtifact = new Artifact<"sheet", Metadata>({
+export const sheetArtifact = new Artifact<"sheet", SheetMetadata>({
   kind: "sheet",
   description: "Useful for working with spreadsheets",
   initialize: () => null,

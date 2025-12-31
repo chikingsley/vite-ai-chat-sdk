@@ -1,11 +1,11 @@
-import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
+import { Elysia } from "elysia";
 import { chatRoutes } from "./routes/chat";
-import { historyRoutes } from "./routes/history";
 import { documentRoutes } from "./routes/document";
-import { voteRoutes } from "./routes/vote";
-import { suggestionsRoutes } from "./routes/suggestions";
 import { filesRoutes } from "./routes/files";
+import { historyRoutes } from "./routes/history";
+import { suggestionsRoutes } from "./routes/suggestions";
+import { voteRoutes } from "./routes/vote";
 
 const app = new Elysia()
   .use(cors())

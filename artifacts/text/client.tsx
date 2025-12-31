@@ -12,7 +12,20 @@ import {
 } from "@/components/icons";
 import { Editor } from "@/components/text-editor";
 import type { Suggestion } from "@/lib/db/schema";
-import { getSuggestions } from "../actions";
+
+async function getSuggestions({
+  documentId,
+}: {
+  documentId: string;
+}): Promise<Suggestion[]> {
+  const response = await fetch(
+    `/api/suggestions?documentId=${encodeURIComponent(documentId)}`
+  );
+  if (!response.ok) {
+    return [];
+  }
+  return response.json();
+}
 
 type TextArtifactMetadata = {
   suggestions: Suggestion[];
@@ -65,7 +78,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     metadata,
   }) => {
     if (isLoading) {
-      return <DocumentSkeleton artifactKind="text" />;
+      return <DocumentSkeleton />;
     }
 
     if (mode === "diff") {

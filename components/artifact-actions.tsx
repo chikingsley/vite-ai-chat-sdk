@@ -12,7 +12,9 @@ type ArtifactActionsProps = {
   currentVersionIndex: number;
   isCurrentVersion: boolean;
   mode: "edit" | "diff";
+  // biome-ignore lint/suspicious/noExplicitAny: Artifact metadata varies by kind
   metadata: any;
+  // biome-ignore lint/suspicious/noExplicitAny: Artifact metadata varies by kind
   setMetadata: Dispatch<SetStateAction<any>>;
 };
 
@@ -59,13 +61,15 @@ function PureArtifactActions({
                 isLoading || artifact.status === "streaming"
                   ? true
                   : action.isDisabled
-                    ? action.isDisabled(actionContext)
+                    ? // @ts-expect-error - action context type varies by artifact kind
+                      action.isDisabled(actionContext)
                     : false
               }
               onClick={async () => {
                 setIsLoading(true);
 
                 try {
+                  // @ts-expect-error - action context type varies by artifact kind
                   await Promise.resolve(action.onClick(actionContext));
                 } catch (_error) {
                   toast.error("Failed to execute action");

@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // User type for sidebar (simplified without next-auth)
 interface User {
@@ -7,6 +7,7 @@ interface User {
   email?: string | null;
   type?: "guest" | "regular";
 }
+
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";

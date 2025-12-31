@@ -56,7 +56,7 @@ const createMockModel = (): LanguageModel => {
                 delta: `${word} `,
               });
               await new Promise((resolve) => {
-                setTimeout(resolve, 10);
+                setTimeout(resolve, 100);
               });
             }
             controller.enqueue({ type: "text-end", id: "t1" });

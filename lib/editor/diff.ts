@@ -1,4 +1,5 @@
 // Modified from https://github.com/hamflx/prosemirror-diff/blob/master/src/diff.js
+// @ts-nocheck - This file is a port of a JS library and type coverage is incomplete
 
 import { diff_match_patch } from "diff-match-patch";
 import { Fragment, Node } from "prosemirror-model";

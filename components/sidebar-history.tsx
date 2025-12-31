@@ -1,7 +1,7 @@
 import { isToday, isYesterday, subMonths, subWeeks } from "date-fns";
 import { motion } from "framer-motion";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // User type for sidebar (simplified without next-auth)
 interface User {
@@ -9,6 +9,7 @@ interface User {
   email?: string | null;
   type?: "guest" | "regular";
 }
+
 import { toast } from "sonner";
 import useSWRInfinite from "swr/infinite";
 import {

@@ -1,4 +1,3 @@
-import { Elysia, t } from "elysia";
 import {
   convertToModelMessages,
   createUIMessageStream,
@@ -7,7 +6,7 @@ import {
   stepCountIs,
   streamText,
 } from "ai";
-import { entitlementsByUserType } from "@/lib/ai/entitlements";
+import { Elysia, t } from "elysia";
 import { systemPrompt } from "@/lib/ai/prompts";
 import { getLanguageModel } from "@/lib/ai/providers";
 import { createDocument } from "@/lib/ai/tools/create-document";
@@ -25,7 +24,6 @@ import {
   updateMessage,
 } from "@/lib/db/queries";
 import type { DBMessage } from "@/lib/db/schema";
-import { ChatSDKError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
 import { convertToUIMessages, generateUUID } from "@/lib/utils";
 import { generateTitleFromUserMessage } from "@/server/actions/chat";
@@ -54,7 +52,13 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
   .post(
     "/chat",
     async ({ body }) => {
-      const { id, message, messages, selectedChatModel, selectedVisibilityType } = body;
+      const {
+        id,
+        message,
+        messages,
+        selectedChatModel,
+        selectedVisibilityType,
+      } = body;
 
       const session = { user: DEFAULT_USER };
 
@@ -124,7 +128,15 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
 
           const result = streamText({
             model: getLanguageModel(selectedChatModel),
-            system: systemPrompt({ selectedChatModel, requestHints: {} }),
+            system: systemPrompt({
+              selectedChatModel,
+              requestHints: {
+                latitude: undefined,
+                longitude: undefined,
+                city: undefined,
+                country: undefined,
+              },
+            }),
             messages: await convertToModelMessages(uiMessages),
             stopWhen: stepCountIs(5),
             experimental_activeTools: isReasoningModel
@@ -168,7 +180,9 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
         onFinish: async ({ messages: finishedMessages }) => {
           if (isToolApprovalFlow) {
             for (const finishedMsg of finishedMessages) {
-              const existingMsg = uiMessages.find((m) => m.id === finishedMsg.id);
+              const existingMsg = uiMessages.find(
+                (m) => m.id === finishedMsg.id
+              );
               if (existingMsg) {
                 await updateMessage({
                   id: finishedMsg.id,
@@ -215,7 +229,10 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
         message: t.Optional(t.Any()),
         messages: t.Optional(t.Array(t.Any())),
         selectedChatModel: t.String(),
-        selectedVisibilityType: t.Union([t.Literal("public"), t.Literal("private")]),
+        selectedVisibilityType: t.Union([
+          t.Literal("public"),
+          t.Literal("private"),
+        ]),
       }),
     }
   )
@@ -247,7 +264,8 @@ export const chatRoutes = new Elysia({ prefix: "/api" })
   )
   // Delete trailing messages
   .delete("/messages/:id/trailing", async ({ params }) => {
-    const { getMessageById, deleteMessagesByChatIdAfterTimestamp } = await import("@/lib/db/queries");
+    const { getMessageById, deleteMessagesByChatIdAfterTimestamp } =
+      await import("@/lib/db/queries");
     const [message] = await getMessageById({ id: params.id });
 
     if (!message) {

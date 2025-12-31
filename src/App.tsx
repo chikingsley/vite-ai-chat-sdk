@@ -1,7 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ChatLayout } from "./layouts/ChatLayout";
-import { NewChatPage } from "./pages/NewChatPage";
 import { ChatPage } from "./pages/ChatPage";
+import { NewChatPage } from "./pages/NewChatPage";
 
 export default function App() {
   return (

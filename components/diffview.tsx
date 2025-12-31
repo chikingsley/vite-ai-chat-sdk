@@ -13,7 +13,7 @@ import { useEffect, useRef } from "react";
 import { renderToString } from "react-dom/server";
 import { Streamdown } from "streamdown";
 
-import { DiffType, diffEditor } from "@/lib/editor/diff";
+import { DiffType, diffEditor } from "@/lib/editor/diff.ts";
 
 const diffSchema = new Schema({
   nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),

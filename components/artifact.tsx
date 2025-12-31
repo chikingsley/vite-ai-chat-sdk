@@ -13,7 +13,6 @@ import {
 import useSWR, { useSWRConfig } from "swr";
 import { useDebounceCallback, useWindowSize } from "usehooks-ts";
 import { codeArtifact } from "@/artifacts/code/client";
-import { imageArtifact } from "@/artifacts/image/client";
 import { sheetArtifact } from "@/artifacts/sheet/client";
 import { textArtifact } from "@/artifacts/text/client";
 import { useArtifact } from "@/hooks/use-artifact";
@@ -29,12 +28,7 @@ import { useSidebar } from "./ui/sidebar";
 import { VersionFooter } from "./version-footer";
 import type { VisibilityType } from "./visibility-selector";
 
-export const artifactDefinitions = [
-  textArtifact,
-  codeArtifact,
-  imageArtifact,
-  sheetArtifact,
-];
+export const artifactDefinitions = [textArtifact, codeArtifact, sheetArtifact];
 export type ArtifactKind = (typeof artifactDefinitions)[number]["kind"];
 
 export type UIArtifact = {
@@ -460,25 +454,46 @@ function PureArtifact({
             </div>
 
             <div className="h-full max-w-full! items-center overflow-y-scroll bg-background dark:bg-muted">
-              <artifactDefinition.content
-                content={
-                  isCurrentVersion
-                    ? artifact.content
-                    : getDocumentContentById(currentVersionIndex)
-                }
-                currentVersionIndex={currentVersionIndex}
-                getDocumentContentById={getDocumentContentById}
-                isCurrentVersion={isCurrentVersion}
-                isInline={false}
-                isLoading={isDocumentsFetching && !artifact.content}
-                metadata={metadata}
-                mode={mode}
-                onSaveContent={saveContent}
-                setMetadata={setMetadata}
-                status={artifact.status}
-                suggestions={[]}
-                title={artifact.title}
-              />
+              {(() => {
+                // Content component type varies by artifact kind
+                const Content =
+                  artifactDefinition.content as React.ComponentType<{
+                    content: string;
+                    currentVersionIndex: number;
+                    getDocumentContentById: (index: number) => string;
+                    isCurrentVersion: boolean;
+                    isInline: boolean;
+                    isLoading: boolean;
+                    metadata: unknown;
+                    mode: "edit" | "diff";
+                    onSaveContent: (content: string, debounce: boolean) => void;
+                    setMetadata: React.Dispatch<React.SetStateAction<unknown>>;
+                    status: "streaming" | "idle";
+                    suggestions: never[];
+                    title: string;
+                  }>;
+                return (
+                  <Content
+                    content={
+                      isCurrentVersion
+                        ? artifact.content
+                        : getDocumentContentById(currentVersionIndex)
+                    }
+                    currentVersionIndex={currentVersionIndex}
+                    getDocumentContentById={getDocumentContentById}
+                    isCurrentVersion={isCurrentVersion}
+                    isInline={false}
+                    isLoading={isDocumentsFetching && !artifact.content}
+                    metadata={metadata}
+                    mode={mode}
+                    onSaveContent={saveContent}
+                    setMetadata={setMetadata}
+                    status={artifact.status}
+                    suggestions={[]}
+                    title={artifact.title}
+                  />
+                );
+              })()}
 
               <AnimatePresence>
                 {isCurrentVersion && (

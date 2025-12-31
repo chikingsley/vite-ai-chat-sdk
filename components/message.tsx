@@ -295,12 +295,17 @@ const PurePreviewMessage = ({
                 );
               }
 
+              const output = part.output as {
+                id: string;
+                title: string;
+                kind: "text" | "code" | "sheet";
+              };
               return (
                 <div className="relative" key={toolCallId}>
                   <DocumentPreview
-                    args={{ ...part.output, isUpdate: true }}
+                    args={{ ...output, isUpdate: true }}
                     isReadonly={isReadonly}
-                    result={part.output}
+                    result={output}
                   />
                 </div>
               );
