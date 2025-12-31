@@ -1,9 +1,12 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type { User } from "next-auth";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+// User type for sidebar (simplified without next-auth)
+interface User {
+  id: string;
+  email?: string | null;
+  type?: "guest" | "regular";
+}
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
@@ -35,7 +38,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { setOpenMobile } = useSidebar();
   const { mutate } = useSWRConfig();
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
@@ -50,8 +53,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       success: () => {
         mutate(unstable_serialize(getChatHistoryPaginationKey));
         setShowDeleteAllDialog(false);
-        router.replace("/");
-        router.refresh();
+        navigate("/", { replace: true });
         return "All chats deleted successfully";
       },
       error: "Failed to delete all chats",
@@ -66,7 +68,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
             <div className="flex flex-row items-center justify-between">
               <Link
                 className="flex flex-row items-center gap-3"
-                href="/"
+                to="/"
                 onClick={() => {
                   setOpenMobile(false);
                 }}
@@ -99,8 +101,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                       className="h-8 p-1 md:h-fit md:p-2"
                       onClick={() => {
                         setOpenMobile(false);
-                        router.push("/");
-                        router.refresh();
+                        navigate("/");
                       }}
                       type="button"
                       variant="ghost"

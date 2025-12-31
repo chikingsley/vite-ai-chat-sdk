@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="theme-color" content="hsl(0 0% 100%)" />
+    <title>AI Chat SDK</title>
+    <script>
+      (function() {
+        var html = document.documentElement;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute('name', 'theme-color');
+          document.head.appendChild(meta);
+        }
+        function updateThemeColor() {
+          var isDark = html.classList.contains('dark');
+          meta.setAttribute('content', isDark ? 'hsl(240deg 10% 3.92%)' : 'hsl(0 0% 100%)');
+        }
+        var observer = new MutationObserver(updateThemeColor);
+        observer.observe(html, { attributes: true, attributeFilter: ['class'] });
+        updateThemeColor();
+      })();
+    </script>
+  </head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
