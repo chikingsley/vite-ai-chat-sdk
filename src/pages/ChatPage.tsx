@@ -1,16 +1,16 @@
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Chat } from "@/components/chat";
 import { DataStreamHandler } from "@/components/data-stream-handler";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
-import { convertToUIMessages } from "@/lib/utils";
 import type { ChatMessage } from "@/lib/types";
+import { convertToUIMessages } from "@/lib/utils";
 
-interface ChatData {
+type ChatData = {
   id: string;
   visibility: "public" | "private";
   userId: string;
-}
+};
 
 export function ChatPage() {
   const { id } = useParams<{ id: string }>();
