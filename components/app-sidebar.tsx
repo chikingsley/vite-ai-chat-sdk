@@ -102,7 +102,8 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                       className="h-8 p-1 md:h-fit md:p-2"
                       onClick={() => {
                         setOpenMobile(false);
-                        navigate("/");
+                        // Force full page reload to ensure fresh chat ID
+                        window.location.href = "/";
                       }}
                       type="button"
                       variant="ghost"
