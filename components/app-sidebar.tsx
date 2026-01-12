@@ -9,6 +9,7 @@ interface User {
 }
 
 import { toast } from "sonner";
+import { apiUrl } from "@/lib/utils";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
 import { PlusIcon, TrashIcon } from "@/components/icons";
@@ -45,7 +46,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const handleDeleteAll = () => {
-    const deletePromise = fetch("/api/history", {
+    const deletePromise = fetch(apiUrl("/api/history"), {
       method: "DELETE",
     });
 

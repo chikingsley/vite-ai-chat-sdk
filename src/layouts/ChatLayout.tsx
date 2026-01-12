@@ -3,6 +3,13 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DataStreamProvider } from "@/components/data-stream-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
+// Default user for internal app (no auth required)
+const DEFAULT_USER = {
+  id: "default-user-id",
+  email: "user@desert-services.com",
+  type: "regular" as const,
+};
+
 export function ChatLayout() {
   // Get sidebar state from localStorage
   const getSidebarState = () => {
@@ -15,7 +22,7 @@ export function ChatLayout() {
   return (
     <DataStreamProvider>
       <SidebarProvider defaultOpen={getSidebarState()}>
-        <AppSidebar user={undefined} />
+        <AppSidebar user={DEFAULT_USER} />
         <SidebarInset>
           <Outlet />
         </SidebarInset>

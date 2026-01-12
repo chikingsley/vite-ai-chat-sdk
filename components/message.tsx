@@ -22,6 +22,7 @@ import { MessageActions } from "./message-actions";
 import { MessageEditor } from "./message-editor";
 import { MessageReasoning } from "./message-reasoning";
 import { PreviewAttachment } from "./preview-attachment";
+import { SearchResults } from "./search-results";
 import { Weather } from "./weather";
 
 const PurePreviewMessage = ({
@@ -338,6 +339,37 @@ const PurePreviewMessage = ({
                           )
                         }
                       />
+                    )}
+                  </ToolContent>
+                </Tool>
+              );
+            }
+
+            // Handle search tool
+            if (type === "tool-search") {
+              const { toolCallId, state, input, output } = part;
+              const searchQuery = input?.query;
+              const searchOutput = output as Array<{ id: string; type: string; name: string; [key: string]: unknown }> | undefined;
+
+              return (
+                <Tool defaultOpen={true} key={toolCallId}>
+                  <ToolHeader state={state} type="tool-search" />
+                  <ToolContent>
+                    {(state === "input-available" || state === "output-available") && searchQuery && (
+                      <div className="border-b px-4 py-2 text-muted-foreground text-sm">
+                        Searching for: <span className="font-medium text-foreground">"{searchQuery}"</span>
+                      </div>
+                    )}
+                    {state === "output-available" && (
+                      <div className="p-4">
+                        {Array.isArray(searchOutput) ? (
+                          <SearchResults results={searchOutput} />
+                        ) : (
+                          <div className="rounded border p-2 text-red-500">
+                            Error: Invalid search results
+                          </div>
+                        )}
+                      </div>
                     )}
                   </ToolContent>
                 </Tool>

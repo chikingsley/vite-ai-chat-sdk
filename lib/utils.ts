@@ -11,12 +11,25 @@ import type { DBMessage, Document } from '@/lib/db/schema';
 import { ChatSDKError, type ErrorCode } from './errors';
 import type { ChatMessage, ChatTools, CustomUIDataTypes } from './types';
 
+// API base URL - extracts base from VITE_CHAT_API_URL (e.g., https://desertservices.app/chat/api/chat -> https://desertservices.app/chat)
+const chatApiUrl = import.meta.env.VITE_CHAT_API_URL || '/api/chat';
+export const API_BASE_URL = chatApiUrl.replace(/\/api\/chat$/, '');
+
+// Build full API URL from relative path
+export function apiUrl(path: string): string {
+  // If path doesn't start with /api, add it
+  const apiPath = path.startsWith('/api') ? path : `/api${path.startsWith('/') ? path : `/${path}`}`;
+  return `${API_BASE_URL}${apiPath}`;
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export const fetcher = async (url: string) => {
-  const response = await fetch(url);
+  // Convert relative API URLs to full URLs
+  const fullUrl = url.startsWith('/api') ? apiUrl(url) : url;
+  const response = await fetch(fullUrl);
 
   if (!response.ok) {
     const { code, cause } = await response.json();
@@ -30,8 +43,14 @@ export async function fetchWithErrorHandlers(
   input: RequestInfo | URL,
   init?: RequestInit,
 ) {
+  // Convert relative API URLs to full URLs
+  let url = input;
+  if (typeof input === 'string' && input.startsWith('/api')) {
+    url = apiUrl(input);
+  }
+
   try {
-    const response = await fetch(input, init);
+    const response = await fetch(url, init);
 
     if (!response.ok) {
       const { code, cause } = await response.json();

@@ -8,6 +8,7 @@ import {
   getChatHistoryPaginationKey,
 } from "@/components/sidebar-history";
 import type { VisibilityType } from "@/components/visibility-selector";
+import { apiUrl } from "@/lib/utils";
 
 export function useChatVisibility({
   chatId,
@@ -42,7 +43,7 @@ export function useChatVisibility({
     setLocalVisibility(updatedVisibilityType);
     mutate(unstable_serialize(getChatHistoryPaginationKey));
 
-    fetch(`/api/chat/${chatId}/visibility`, {
+    fetch(apiUrl(`/api/chat/${chatId}/visibility`), {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ visibility: updatedVisibilityType }),

@@ -70,6 +70,26 @@ type SearchResult = {
   account_type?: string;
   headquarters?: string;
   domain?: string;
+  // Project fields
+  project_status?: string;
+  city?: string;
+  state?: string;
+  location?: string;
+  start_date?: string;
+  end_date?: string;
+  general_contractor?: string;
+  estimate_file?: string;
+  // Inspection report fields
+  project_id?: string;
+  project_name?: string;
+  inspection_date?: string;
+  account?: string;
+  super?: string;
+  last_report_sent?: string;
+  // Lead fields
+  last_activity?: string;
+  last_activity_date?: string;
+  date_added?: string;
 };
 
 function formatBytes(bytes?: number): string {
@@ -113,6 +133,10 @@ const TYPE_COLORS: Record<string, string> = {
   contractor:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
   contact: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300",
+  project: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
+  inspection_report:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  lead: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
 };
 
 const TYPE_LABELS: Record<string, string> = {
@@ -121,6 +145,9 @@ const TYPE_LABELS: Record<string, string> = {
   swppp_plan: "SWPPP Plan",
   contractor: "Contractor",
   contact: "Contact",
+  project: "Project",
+  inspection_report: "Inspection",
+  lead: "Lead",
 };
 
 function FileDownloadButton({ file }: { file: SearchFile }) {

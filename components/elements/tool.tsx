@@ -29,9 +29,21 @@ export const Tool = ({ className, ...props }: ToolProps) => (
 );
 
 export type ToolHeaderProps = {
-  type: ToolUIPart["type"];
-  state: ToolUIPart["state"];
+  type: ToolUIPart["type"] | string;
+  state: ToolUIPart["state"] | string;
   className?: string;
+};
+
+const TOOL_LABELS: Record<string, string> = {
+  "tool-search": "Search Monday.com",
+  "tool-getWeather": "Get Weather",
+  "tool-createDocument": "Create Document",
+  "tool-updateDocument": "Update Document",
+  "tool-requestSuggestions": "Request Suggestions",
+};
+
+const getToolLabel = (type: string): string => {
+  return TOOL_LABELS[type] || type.replace("tool-", "").replace(/-/g, " ");
 };
 
 const getStatusBadge = (status: ToolUIPart["state"]) => {
@@ -81,10 +93,10 @@ export const ToolHeader = ({
   >
     <div className="flex min-w-0 flex-1 items-center gap-2">
       <WrenchIcon className="size-4 shrink-0 text-muted-foreground" />
-      <span className="truncate font-medium text-sm">{type}</span>
+      <span className="truncate font-medium text-sm">{getToolLabel(type as string)}</span>
     </div>
     <div className="flex shrink-0 items-center gap-2">
-      {getStatusBadge(state)}
+      {getStatusBadge(state as ToolUIPart["state"])}
       <ChevronDownIcon className="size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
     </div>
   </CollapsibleTrigger>

@@ -4,7 +4,7 @@ import { Chat } from "@/components/chat";
 import { DataStreamHandler } from "@/components/data-stream-handler";
 import { DEFAULT_CHAT_MODEL } from "@/lib/ai/models";
 import type { ChatMessage } from "@/lib/types";
-import { convertToUIMessages } from "@/lib/utils";
+import { apiUrl } from "@/lib/utils";
 
 interface ChatData {
   id: string;
@@ -28,7 +28,7 @@ export function ChatPage() {
 
       try {
         // Fetch chat data
-        const chatResponse = await fetch(`/api/chat/${id}`);
+        const chatResponse = await fetch(apiUrl(`/api/chat/${id}`));
         if (!chatResponse.ok) {
           navigate("/");
           return;
@@ -36,11 +36,11 @@ export function ChatPage() {
         const chatData = await chatResponse.json();
         setChat(chatData);
 
-        // Fetch messages
-        const messagesResponse = await fetch(`/api/chat/${id}/messages`);
+        // Fetch messages (already converted by backend)
+        const messagesResponse = await fetch(apiUrl(`/api/chat/${id}/messages`));
         if (messagesResponse.ok) {
           const messagesData = await messagesResponse.json();
-          setMessages(convertToUIMessages(messagesData));
+          setMessages(messagesData as ChatMessage[]);
         }
       } catch (error) {
         console.error("Failed to load chat:", error);

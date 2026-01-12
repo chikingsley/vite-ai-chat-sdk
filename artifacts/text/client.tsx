@@ -12,6 +12,7 @@ import {
 } from "@/components/icons";
 import { Editor } from "@/components/text-editor";
 import type { Suggestion } from "@/lib/db/schema";
+import { apiUrl } from "@/lib/utils";
 
 async function getSuggestions({
   documentId,
@@ -19,7 +20,7 @@ async function getSuggestions({
   documentId: string;
 }): Promise<Suggestion[]> {
   const response = await fetch(
-    `/api/suggestions?documentId=${encodeURIComponent(documentId)}`
+    apiUrl(`/api/suggestions?documentId=${encodeURIComponent(documentId)}`)
   );
   if (!response.ok) {
     return [];
